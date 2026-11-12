@@ -389,6 +389,7 @@ footer a { color: var(--fg); }
     <div class="buttons">
       <button type="button" id="start">Start week</button>
       <button type="button" id="skip" class="secondary" hidden>Sla over</button>
+      <button type="button" id="motion" class="secondary" hidden>Toch animeren</button>
       <button type="button" id="reset" class="secondary">Terug naar 2024</button>
     </div>
 
@@ -513,6 +514,7 @@ footer a { color: var(--fg); }
   const ctx = canvas.getContext("2d");
   const W = 320, H = 240;
   const reduceMotion = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+  let forceMotion = false;
 
   function state() {
     return {
@@ -740,7 +742,12 @@ footer a { color: var(--fg); }
     $("skip").hidden = false;
     $("start").disabled = true;
     $("result").innerHTML = '<div class="head">De week loopt…</div><p>Kijk wie er binnenkomt.</p>';
-    if (reduceMotion) { finishWeek(r); return; }
+    if (reduceMotion && !forceMotion) {
+      finishWeek(r);
+      $("motion").hidden = false;
+      $("result").insertAdjacentHTML("beforeend", '<p class="tip">Je apparaat staat op minder beweging, daarom zie je de ambtenaren niet lopen. Druk op Toch animeren om ze wel te zien.</p>');
+      return;
+    }
     anim = { r, d: 0, t0: performance.now(), sprites: makeDaySprites(r, 0), entered: {}, hold: 0, raf: 0 };
     renderDays(blankDays(r), 0);
     anim.raf = requestAnimationFrame(tick);
@@ -969,6 +976,7 @@ footer a { color: var(--fg); }
 
   $("start").addEventListener("click", startWeek);
   $("skip").addEventListener("click", () => { if (anim) finishWeek(anim.r); });
+  $("motion").addEventListener("click", () => { forceMotion = true; $("motion").hidden = true; startWeek(); });
   $("reset").addEventListener("click", () => {
     stopAnim();
     Object.keys(DEFAULTS).forEach((k) => { inputs[k].value = DEFAULTS[k]; });
