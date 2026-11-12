@@ -1,4 +1,4 @@
-# RIJKSKANTOOR.EXE
+# RIJKSKANTOOR-GAME
 
 Een spel over de Haagse rijkskantoren. Stel in hoeveel werkplekken per fte, hoeveel vierkante meter per werkplek en hoe de week verdeeld is, en kijk of de ambtenaren precies passen.
 
