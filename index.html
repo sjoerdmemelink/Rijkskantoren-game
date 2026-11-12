@@ -20,38 +20,38 @@
 <link href="https://fonts.googleapis.com/css2?family=Press+Start+2P&family=VT323&display=swap" rel="stylesheet">
 <style>
 :root {
-  color-scheme: light;
-  /* Game Boy (licht) */
-  --bg: #9BBC0F;
-  --fg: #0F380F;
-  --dim: #306230;
-  --accent: #0F380F;
-  --accent-fg: #9BBC0F;
-  --panel: #8BAC0F;
-  --frame: #306230;
-  --bar: #306230;
-  --bar-over: #0F380F;
-  --band: rgba(15, 56, 15, 0.18);
+  color-scheme: dark;
+  /* EGA, DOS 1987: één vaste, blauwe uitvoering */
+  --bg: #0000AA;
+  --fg: #FFFFFF;
+  --dim: #AAAAAA;
+  --accent: #FFFF55;
+  --accent-fg: #000000;
+  --panel: #000000;
+  --frame: #55FFFF;
+  --bar: #55FFFF;
+  --bar-over: #FF5555;
+  --band: rgba(255, 255, 85, 0.22);
 
-  --c-sky: #9BBC0F;
-  --c-ground: #306230;
-  --c-line: #0F380F;
-  --c-bld1: #306230;
-  --c-bld2: #306230;
-  --c-bld3: #306230;
-  --c-outline: #0F380F;
-  --c-win: #0F380F;
-  --c-lit: #9BBC0F;
-  --c-sold: #8BAC0F;
-  --c-plank: #306230;
-  --c-sign: #0F380F;
-  --c-signtext: #9BBC0F;
-  --c-suit: #0F380F;
-  --c-skin1: #8BAC0F;
-  --c-skin2: #8BAC0F;
-  --c-tie: #306230;
-  --c-cup: #9BBC0F;
-  --c-select: #0F380F;
+  --c-sky: #5555FF;
+  --c-ground: #555555;
+  --c-line: #AAAAAA;
+  --c-bld1: #AAAAAA;
+  --c-bld2: #00AAAA;
+  --c-bld3: #AA5500;
+  --c-outline: #000000;
+  --c-win: #000000;
+  --c-lit: #FFFF55;
+  --c-sold: #555555;
+  --c-plank: #AA5500;
+  --c-sign: #FF5555;
+  --c-signtext: #FFFFFF;
+  --c-suit: #000000;
+  --c-skin1: #FFAA55;
+  --c-skin2: #AA5500;
+  --c-tie: #FF5555;
+  --c-cup: #FFFFFF;
+  --c-select: #FFFF55;
 
   --font-title: "Press Start 2P", ui-monospace, "Courier New", monospace;
   --font-body: "VT323", ui-monospace, "Courier New", monospace;
@@ -59,50 +59,6 @@
   box-sizing: border-box;
   padding-top: env(safe-area-inset-top, 0px);
   padding-bottom: env(safe-area-inset-bottom, 0px);
-}
-@media (prefers-color-scheme: dark) {
-  :root:not([data-theme="light"]) {
-    color-scheme: dark;
-    /* EGA, DOS 1987 */
-    --bg: #0000AA;
-    --fg: #FFFFFF;
-    --dim: #AAAAAA;
-    --accent: #FFFF55;
-    --accent-fg: #000000;
-    --panel: #000000;
-    --frame: #55FFFF;
-    --bar: #55FFFF;
-    --bar-over: #FF5555;
-    --band: rgba(255, 255, 85, 0.22);
-
-    --c-sky: #5555FF;
-    --c-ground: #555555;
-    --c-line: #AAAAAA;
-    --c-bld1: #AAAAAA;
-    --c-bld2: #00AAAA;
-    --c-bld3: #AA5500;
-    --c-outline: #000000;
-    --c-win: #000000;
-    --c-lit: #FFFF55;
-    --c-sold: #555555;
-    --c-plank: #AA5500;
-    --c-sign: #FF5555;
-    --c-signtext: #FFFFFF;
-    --c-suit: #000000;
-    --c-skin1: #FFAA55;
-    --c-skin2: #AA5500;
-    --c-tie: #FF5555;
-    --c-cup: #FFFFFF;
-    --c-select: #FFFF55;
-  }
-}
-:root[data-theme="dark"] {
-  color-scheme: dark;
-  --bg: #0000AA; --fg: #FFFFFF; --dim: #AAAAAA; --accent: #FFFF55; --accent-fg: #000000;
-  --panel: #000000; --frame: #55FFFF; --bar: #55FFFF; --bar-over: #FF5555; --band: rgba(255,255,85,0.22);
-  --c-sky: #5555FF; --c-ground: #555555; --c-line: #AAAAAA; --c-bld1: #AAAAAA; --c-bld2: #00AAAA; --c-bld3: #AA5500;
-  --c-outline: #000000; --c-win: #000000; --c-lit: #FFFF55; --c-sold: #555555; --c-plank: #AA5500; --c-sign: #FF5555;
-  --c-signtext: #FFFFFF; --c-suit: #000000; --c-skin1: #FFAA55; --c-skin2: #AA5500; --c-tie: #FF5555; --c-cup: #FFFFFF; --c-select: #FFFF55;
 }
 
 html { height: 100%; }
