@@ -1,0 +1,1009 @@
+<!DOCTYPE html>
+<html lang="nl">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>RIJKSKANTOOR.EXE</title>
+<meta name="description" content="Stel de schuiven in, druk op Start en kijk of ruim 46.000 ambtenaren precies in de Haagse rijkskantoren passen. Te veel kantoor? Bordjes Te koop. Te weinig? Een rij op de stoep.">
+<meta property="og:type" content="website">
+<meta property="og:locale" content="nl_NL">
+<meta property="og:title" content="RIJKSKANTOOR.EXE: passen 46.000 ambtenaren in 25 kantoren?">
+<meta property="og:description" content="Stel de schuiven in, druk op Start en kijk of ruim 46.000 ambtenaren precies in de Haagse rijkskantoren passen. Te veel kantoor? Bordjes Te koop. Te weinig? Een rij op de stoep.">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="RIJKSKANTOOR.EXE: passen 46.000 ambtenaren in 25 kantoren?">
+<meta name="twitter:description" content="Stel de schuiven in, druk op Start en kijk of ruim 46.000 ambtenaren precies in de Haagse rijkskantoren passen.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Press+Start+2P&family=VT323&display=swap" rel="stylesheet">
+<style>
+:root {
+  color-scheme: light;
+  /* Game Boy (licht) */
+  --bg: #9BBC0F;
+  --fg: #0F380F;
+  --dim: #306230;
+  --accent: #0F380F;
+  --accent-fg: #9BBC0F;
+  --panel: #8BAC0F;
+  --frame: #306230;
+  --bar: #306230;
+  --bar-over: #0F380F;
+  --band: rgba(15, 56, 15, 0.18);
+
+  --c-sky: #9BBC0F;
+  --c-ground: #306230;
+  --c-line: #0F380F;
+  --c-bld1: #306230;
+  --c-bld2: #306230;
+  --c-bld3: #306230;
+  --c-outline: #0F380F;
+  --c-win: #0F380F;
+  --c-lit: #9BBC0F;
+  --c-sold: #8BAC0F;
+  --c-plank: #306230;
+  --c-sign: #0F380F;
+  --c-signtext: #9BBC0F;
+  --c-suit: #0F380F;
+  --c-skin1: #8BAC0F;
+  --c-skin2: #8BAC0F;
+  --c-tie: #306230;
+  --c-cup: #9BBC0F;
+  --c-select: #0F380F;
+
+  --font-title: "Press Start 2P", ui-monospace, "Courier New", monospace;
+  --font-body: "VT323", ui-monospace, "Courier New", monospace;
+
+  box-sizing: border-box;
+  padding-top: env(safe-area-inset-top, 0px);
+  padding-bottom: env(safe-area-inset-bottom, 0px);
+}
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme="light"]) {
+    color-scheme: dark;
+    /* EGA, DOS 1987 */
+    --bg: #0000AA;
+    --fg: #FFFFFF;
+    --dim: #AAAAAA;
+    --accent: #FFFF55;
+    --accent-fg: #000000;
+    --panel: #000000;
+    --frame: #55FFFF;
+    --bar: #55FFFF;
+    --bar-over: #FF5555;
+    --band: rgba(255, 255, 85, 0.22);
+
+    --c-sky: #5555FF;
+    --c-ground: #555555;
+    --c-line: #AAAAAA;
+    --c-bld1: #AAAAAA;
+    --c-bld2: #00AAAA;
+    --c-bld3: #AA5500;
+    --c-outline: #000000;
+    --c-win: #000000;
+    --c-lit: #FFFF55;
+    --c-sold: #555555;
+    --c-plank: #AA5500;
+    --c-sign: #FF5555;
+    --c-signtext: #FFFFFF;
+    --c-suit: #000000;
+    --c-skin1: #FFAA55;
+    --c-skin2: #AA5500;
+    --c-tie: #FF5555;
+    --c-cup: #FFFFFF;
+    --c-select: #FFFF55;
+  }
+}
+:root[data-theme="dark"] {
+  color-scheme: dark;
+  --bg: #0000AA; --fg: #FFFFFF; --dim: #AAAAAA; --accent: #FFFF55; --accent-fg: #000000;
+  --panel: #000000; --frame: #55FFFF; --bar: #55FFFF; --bar-over: #FF5555; --band: rgba(255,255,85,0.22);
+  --c-sky: #5555FF; --c-ground: #555555; --c-line: #AAAAAA; --c-bld1: #AAAAAA; --c-bld2: #00AAAA; --c-bld3: #AA5500;
+  --c-outline: #000000; --c-win: #000000; --c-lit: #FFFF55; --c-sold: #555555; --c-plank: #AA5500; --c-sign: #FF5555;
+  --c-signtext: #FFFFFF; --c-suit: #000000; --c-skin1: #FFAA55; --c-skin2: #AA5500; --c-tie: #FF5555; --c-cup: #FFFFFF; --c-select: #FFFF55;
+}
+
+html { height: 100%; }
+body {
+  margin: 0;
+  min-height: 100%;
+  background: var(--bg);
+  color: var(--fg);
+  font-family: var(--font-body);
+  font-size: 22px;
+  line-height: 1.15;
+  -webkit-font-smoothing: none;
+}
+.wrap {
+  max-width: 1000px;
+  margin: 0 auto;
+  padding: 16px 14px 32px;
+}
+
+header h1 {
+  font-family: var(--font-title);
+  font-size: clamp(18px, 4.6vw, 30px);
+  line-height: 1.3;
+  margin: 8px 0 12px;
+  color: var(--accent);
+  letter-spacing: 0.02em;
+}
+header h1 .cursor {
+  display: inline-block;
+  width: 0.6em;
+  height: 0.9em;
+  background: var(--accent);
+  vertical-align: -0.08em;
+  margin-left: 0.15em;
+  animation: blink 1s steps(1) infinite;
+}
+@keyframes blink { 50% { opacity: 0; } }
+@media (prefers-reduced-motion: reduce) { header h1 .cursor { animation: none; } }
+
+.intro { margin: 0 0 18px; }
+.intro p { margin: 0 0 8px; }
+
+.layout {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 18px;
+}
+@media (min-width: 860px) {
+  .layout { grid-template-columns: minmax(0, 1.35fr) minmax(0, 1fr); align-items: stretch; }
+}
+
+.screen {
+  border: 4px solid var(--frame);
+  background: var(--panel);
+  padding: 8px;
+  display: flex;
+  flex-direction: column;
+}
+.hud {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 6px 10px;
+  margin-bottom: 8px;
+}
+.hud div { min-width: 0; }
+.hud .k { color: var(--dim); font-size: 18px; display: block; }
+.hud .v { font-family: var(--font-title); font-size: clamp(9px, 2.3vw, 13px); line-height: 1.5; color: var(--accent); white-space: nowrap; }
+.hud .d { display: block; font-size: 18px; color: var(--dim); }
+
+canvas {
+  display: block;
+  width: 100%;
+  height: auto;
+  aspect-ratio: 320 / 240;
+  image-rendering: pixelated;
+  image-rendering: crisp-edges;
+  cursor: pointer;
+  touch-action: manipulation;
+}
+.status {
+  min-height: 1.3em;
+  margin: 6px 2px 4px;
+  color: var(--fg);
+}
+.legend { color: var(--dim); font-size: 18px; margin: 0 2px 8px; }
+
+.days {
+  display: grid;
+  grid-template-columns: repeat(5, minmax(0, 1fr));
+  gap: 6px;
+  flex: 1;
+}
+.day { text-align: center; display: flex; flex-direction: column; }
+.day .track {
+  position: relative;
+  flex: 1;
+  min-height: 74px;
+  border: 2px solid var(--frame);
+  background: var(--bg);
+  overflow: hidden;
+}
+.day .band {
+  position: absolute; left: 0; right: 0;
+  bottom: 70%; height: 10%;
+  background: var(--band);
+}
+.day .fill {
+  position: absolute; left: 0; right: 0; bottom: 0;
+  height: 0;
+  background: var(--bar);
+}
+.day.over .fill { background: var(--bar-over); }
+.day.active .track { border-color: var(--accent); }
+.day .lbl { font-family: var(--font-title); font-size: 10px; margin-top: 5px; }
+.day .pct { font-size: 20px; }
+.day .q { font-size: 17px; color: var(--fg); min-height: 1.1em; }
+
+.panel {
+  border: 4px solid var(--frame);
+  background: var(--panel);
+  padding: 12px 12px 14px;
+}
+.panel h2 {
+  font-family: var(--font-title);
+  font-size: 12px;
+  line-height: 1.6;
+  margin: 0 0 8px;
+  color: var(--accent);
+}
+.goal { margin: 0 0 14px; }
+
+.ctrl { margin: 0 0 14px; }
+.ctrl .row { display: flex; justify-content: space-between; gap: 8px; align-items: baseline; }
+.ctrl label { font-size: 22px; }
+.ctrl output { font-family: var(--font-title); font-size: 11px; color: var(--accent); white-space: nowrap; }
+.ctrl .hint { color: var(--dim); font-size: 18px; }
+
+input[type="range"] {
+  -webkit-appearance: none;
+  appearance: none;
+  width: 100%;
+  height: 22px;
+  background: transparent;
+  margin: 4px 0 0;
+}
+input[type="range"]::-webkit-slider-runnable-track {
+  height: 8px;
+  background: var(--bg);
+  border: 2px solid var(--frame);
+}
+input[type="range"]::-moz-range-track {
+  height: 8px;
+  background: var(--bg);
+  border: 2px solid var(--frame);
+}
+input[type="range"]::-webkit-slider-thumb {
+  -webkit-appearance: none;
+  width: 16px; height: 22px;
+  margin-top: -9px;
+  background: var(--accent);
+  border: 2px solid var(--fg);
+  border-radius: 0;
+}
+input[type="range"]::-moz-range-thumb {
+  width: 14px; height: 20px;
+  background: var(--accent);
+  border: 2px solid var(--fg);
+  border-radius: 0;
+}
+input[type="range"]:focus-visible { outline: 3px dashed var(--accent); outline-offset: 3px; }
+
+.buttons { display: flex; flex-wrap: wrap; gap: 10px; margin-top: 4px; }
+button {
+  font-family: var(--font-title);
+  font-size: 12px;
+  line-height: 1.4;
+  padding: 12px 14px;
+  border: 3px solid var(--fg);
+  background: var(--accent);
+  color: var(--accent-fg);
+  cursor: pointer;
+  border-radius: 0;
+  box-shadow: 4px 4px 0 var(--frame);
+}
+button:active { transform: translate(2px, 2px); box-shadow: 2px 2px 0 var(--frame); }
+button.secondary { background: var(--panel); color: var(--fg); }
+button:focus-visible { outline: 3px dashed var(--fg); outline-offset: 3px; }
+button[hidden] { display: none; }
+
+.mode { display: flex; flex-wrap: wrap; gap: 8px; margin: 0 0 16px; }
+.mode button { flex: 1 1 auto; font-size: 10px; padding: 10px; box-shadow: 3px 3px 0 var(--frame); }
+.mode button[aria-pressed="false"] { background: var(--panel); color: var(--fg); }
+.ctrl.off { opacity: 0.55; }
+input[type="range"]:disabled { cursor: not-allowed; }
+
+.result {
+  margin-top: 16px;
+  border: 3px dashed var(--frame);
+  padding: 10px 12px;
+  min-height: 3em;
+}
+.result .head { font-family: var(--font-title); font-size: 13px; line-height: 1.6; color: var(--accent); margin-bottom: 6px; }
+.result ul { list-style: none; padding: 0; margin: 6px 0 8px; }
+.result li { margin: 2px 0; }
+.result .tip { color: var(--dim); }
+
+footer {
+  margin-top: 26px;
+  border-top: 4px solid var(--frame);
+  padding-top: 14px;
+}
+footer h2 { font-family: var(--font-title); font-size: 12px; line-height: 1.6; color: var(--accent); margin: 14px 0 6px; }
+footer p, footer li { margin: 0 0 6px; }
+footer ul { padding-left: 1.1em; margin: 0 0 10px; }
+footer a { color: var(--fg); }
+.sr { position: absolute; width: 1px; height: 1px; overflow: hidden; clip: rect(0 0 0 0); white-space: nowrap; }
+</style>
+</head>
+<body>
+<div class="wrap">
+
+<header>
+  <h1>RIJKSKANTOOR.EXE<span class="cursor" aria-hidden="true"></span></h1>
+  <div class="intro">
+    <p>Den Haag, 2024. Vijfentwintig rijkskantoren, 46.140 ambtenaren, 752.443 vierkante meter. Op dinsdag komt bijna de helft, op vrijdag bijna niemand.</p>
+    <p>Elk gebouw in dit spel staat voor een vijfentwintigste van al die rijkskantoren: zo’n 30.000 vierkante meter. Jij bepaalt hoeveel kantoor het Rijk nodig heeft. Stel de schuiven in en druk op Start week.</p>
+  </div>
+</header>
+
+<div class="layout">
+
+  <section class="screen" aria-label="Speelveld">
+    <div class="hud">
+      <div><span class="k">Kantoor</span><span class="v" id="hudM2">752.443 m²</span><span class="d" id="hudM2d">zoals 2024</span></div>
+      <div><span class="k">Kosten per jaar</span><span class="v" id="hudCost">€ 248,9 mln</span><span class="d" id="hudCostd">zoals 2024</span></div>
+      <div><span class="k">Per aanwezige</span><span class="v" id="hudPer">€ 39.900</span><span class="d" id="hudPerd">zoals 2024</span></div>
+    </div>
+    <canvas id="game" width="320" height="240" aria-label="De Haagse rijkskantoren als 25 even grote pixelgebouwen, elk een vijfentwintigste van de totale oppervlakte." role="img"></canvas>
+    <p class="status" id="status" aria-live="polite">Elk gebouw: 30.098 m², plek voor ongeveer 1.250 werkplekken.</p>
+    <p class="legend">Gele ramen: bezet bureau. Rood bordje: te koop. Poppetjes buiten: geen plek.</p>
+    <div class="days" id="days" aria-label="Bezetting per dag"></div>
+  </section>
+
+  <section class="panel" aria-label="Instellingen">
+    <h2>Rekenwijze</h2>
+    <div class="mode" role="group" aria-label="Rekenwijze">
+      <button type="button" id="m-rijk" aria-pressed="true">Zoals het Rijk</button>
+      <button type="button" id="m-bez" aria-pressed="false">Op bezetting</button>
+    </div>
+
+    <h2>Doel</h2>
+    <p class="goal" id="goal">De twee drukste dagen tussen 70 en 80 procent bezet. Niemand buiten. En minstens 15 procent minder vierkante meters.</p>
+
+    <div class="ctrl" id="c-wpf">
+      <div class="row"><label for="wpf">Werkplekken per fte</label><output id="o-wpf" for="wpf"></output></div>
+      <input type="range" id="wpf" min="0.25" max="0.90" step="0.01" value="0.68">
+      <div class="hint" id="h-wpf">Nu 0,68. Het kabinet wil naar 0,50.</div>
+    </div>
+
+    <div class="ctrl">
+      <div class="row"><label for="m2">Vierkante meter per werkplek</label><output id="o-m2" for="m2"></output></div>
+      <input type="range" id="m2" min="22" max="30" step="0.5" value="24">
+      <div class="hint">Rijksnorm 24,5. In Den Haag nu ongeveer 24. Krapper dan 22 laat het spel niet toe.</div>
+    </div>
+
+    <div class="ctrl">
+      <div class="row"><label for="spread">Spreiding over de week</label><output id="o-spread" for="spread"></output></div>
+      <input type="range" id="spread" min="0" max="100" step="5" value="0">
+      <div class="hint" id="h-spread">Van zoals in 2024 naar elke dag even druk. In de formule van het Rijk verandert dit het aantal gebouwen niet.</div>
+    </div>
+
+    <div class="ctrl">
+      <div class="row"><label for="daysmul">Kantoordagen ten opzichte van 2024</label><output id="o-days" for="daysmul"></output></div>
+      <input type="range" id="daysmul" min="-40" max="60" step="5" value="0">
+      <div class="hint" id="h-days">Meer thuis of juist meer op kantoor. Telt in de formule van het Rijk niet mee.</div>
+    </div>
+
+    <div class="ctrl">
+      <div class="row"><label for="krimp">Krimp van de formatie</label><output id="o-krimp" for="krimp"></output></div>
+      <input type="range" id="krimp" min="0" max="45" step="1" value="0">
+      <div class="hint">25.000 fte op de hele rijksdienst is ongeveer 16 procent. Bij sommige beleidsdirecties tot 45.</div>
+    </div>
+
+    <div class="buttons">
+      <button type="button" id="start">Start week</button>
+      <button type="button" id="skip" class="secondary" hidden>Sla over</button>
+      <button type="button" id="reset" class="secondary">Terug naar 2024</button>
+    </div>
+
+    <div class="result" id="result" aria-live="polite">
+      <div class="head">Klaar voor de start</div>
+      <p>Druk zonder iets te veranderen op Start week om te zien hoe 2024 eruitzag.</p>
+    </div>
+  </section>
+
+</div>
+
+<footer>
+  <h2>Colofon</h2>
+  <p>Gemaakt door Sjoerd Memelink. Dit is geen publicatie van de Rijksoverheid. De cijfers komen van het Rijk; de rekensom en de aannames in dit spel zijn van mij.</p>
+
+  <h2>Hoe het spel rekent</h2>
+  <p>In de stand <em>Zoals het Rijk</em> rekent het spel zoals het Rijk zelf: aantal fte maal werkplekken per fte maal vierkante meter per werkplek geeft de ruimte die nodig is. Hoeveel mensen er werkelijk komen, telt daarin niet mee.</p>
+  <p>In de stand <em>Op bezetting</em> draait het spel dat om. Het neemt de mensen die op de twee drukste dagen komen, en houdt precies genoeg werkplekken over om die dagen op 75 procent te krijgen, de streefwaarde uit het Kader Rijkskantoren. De werkplekken per fte volgen daar dan uit.</p>
+  <p>De 25 rijkskantoren zijn getekend als 25 even grote gebouwen, elk een vijfentwintigste van de totale oppervlakte. Is er minder ruimte nodig, dan gaat per vier procent één gebouw in de verkoop. Welk gebouw het bordje krijgt, zegt niets over welk echt pand het Rijk zou afstoten. In werkelijkheid zijn de panden heel verschillend: de negen grootste bevatten driekwart van alle ruimte.</p>
+  <p>Hoeveel mensen er per dag komen, volgt uit de gemeten bezetting van 2024: maandag 37, dinsdag 48, woensdag 25, donderdag 43 en vrijdag 12 procent. Spreiding verdeelt hetzelfde aantal kantoordagen gelijker over de week.</p>
+
+  <h2>Aannames</h2>
+  <ul>
+    <li>De bezettingspercentages zijn gescande toegangspassen, medewerkers en bezoekers samen. Ze zeggen wie naar binnen liep, niet wie aan een bureau zat. Ik lees ze als aandeel van de ongeveer 31.500 werkplekken. Meet het Rijk ze tegen een ander getal af, dan verschuift de uitkomst van dit spel.</li>
+    <li>Er is geen bezetting per pand bekend, alleen voor Den Haag als geheel. Alle panden krijgen daarom dezelfde week.</li>
+    <li>Er wordt in dit spel niet gebouwd en niet per verdieping afgestoten. Boekwaarde, verkoopopbrengst en geschiktheid voor woningen tellen niet mee.</li>
+    <li>Kosten per jaar zijn de huisvestingskosten zoals opgegeven door het Rijk, gelijk verdeeld over de 25 gebouwen. Kosten per aanwezige rekenen daar facilitair en ICT bij, in de verhouding 6 staat tot 4 die het Rijk zelf hanteert.</li>
+    <li>Parnassusplein 5 staat in de opgave van het Rijk dubbel; het totaal volgt de officiële opgave.</li>
+  </ul>
+
+  <h2>De echte panden</h2>
+  <p>Turfmarkt 147, Rijnstraat 8, Korte Voorhout 7, Parnassusplein 5, Rijnstraat 50, Bezuidenhoutseweg 73, Koningskade 4, Prinses Beatrixlaan 2, Kalvermarkt 32, Wilhelmina van Pruisenweg 52, Prinses Beatrixlaan 450-512, Muzenstraat 31-107, Bezuidenhoutseweg 30, Schedeldoekshaven 101, Prinses Beatrixlaan 116, Kneuterdijk 1, Schedeldoekshaven 131, Schenkkade 100, Bezuidenhoutseweg 20, Plein 4, Prins Clauslaan 14-18, Alexanderveld 5, Henri Faasdreef 312, Hoge Nieuwstraat 8 en Turfmarkt 244. Van 121.920 tot 1.211 m².</p>
+
+  <h2>Bronnen</h2>
+  <ul>
+    <li>Huisvestingscijfers 25 rijkskantoren Den Haag over 2024, opgevraagd bij de Rijksoverheid (mei 2025).</li>
+    <li>Rijksvastgoedbedrijf, Woo-besluit van 10 november 2026, zaaknummer 12625798, met de Uitwerking propositie beheersing integrale huisvestingskosten van 29 mei 2026.</li>
+    <li><a href="https://www.tweedekamer.nl/kamerstukken/brieven_regering/detail?id=2026Z22924&amp;did=2026D52762">Voortgangsbrief Slagvaardige Overheid</a>, 26 oktober 2026.</li>
+    <li>Kader Rijkskantoren 2025, voor de ruimtenorm en de streefwaarde van 75 procent op de twee drukste dagen.</li>
+  </ul>
+</footer>
+
+</div>
+
+<script>
+(function () {
+  "use strict";
+
+  // ---------- Data: opgave Rijk 2024, 25 panden ----------
+  const NB = 25;
+  const TOTAL_COST = 248851066;
+  const TOTAL_BVO = 752443;
+  const BLOCK_BVO = TOTAL_BVO / NB;
+  const BLOCK_COST = TOTAL_COST / NB;
+  // vaste, verspreide volgorde waarin gebouwen een bordje krijgen
+  const SELL_ORDER = [12, 3, 21, 8, 16, 0, 24, 6, 18, 11, 2, 22, 14, 9, 19, 5, 1, 23, 13, 7, 17, 4, 20, 10, 15];
+  const TOTAL_FTE = 46140;
+  const BASE_WP = 31500;                       // werkplekken; noemer van de pasaanbiedingen (aanname)
+  const SHAPE = [0.37, 0.48, 0.25, 0.43, 0.12]; // bezetting 2024, ma t/m vr
+  const SHAPE_MEAN = SHAPE.reduce((a, b) => a + b, 0) / 5;
+  const RVB_SHARE = 0.6;                        // RVB : facilitair+ICT = 6 : 4
+  const DAYS = ["ma", "di", "wo", "do", "vr"];
+  const DAY_NAMES = ["maandag", "dinsdag", "woensdag", "donderdag", "vrijdag"];
+  const UNIT = 150;                             // ambtenaren per poppetje
+
+  const DEFAULTS = { wpf: 0.68, m2: 24, spread: 0, daysmul: 0, krimp: 0 };
+
+  // ---------- Formatting ----------
+  const nf0 = new Intl.NumberFormat("nl-NL", { maximumFractionDigits: 0 });
+  const nf1 = new Intl.NumberFormat("nl-NL", { minimumFractionDigits: 1, maximumFractionDigits: 1 });
+  const nf2 = new Intl.NumberFormat("nl-NL", { minimumFractionDigits: 2, maximumFractionDigits: 2 });
+  const pct = (x) => nf0.format(Math.round(x * 100)) + "%";
+
+  // ---------- Model ----------
+  let mode = "rijk";
+
+  function compute(st, m) {
+    m = m || mode;
+    const fte = TOTAL_FTE * (1 - st.krimp / 100);
+    const s = st.spread / 100;
+    const mult = (1 + st.daysmul / 100) * (1 - st.krimp / 100);
+    const present = SHAPE.map((v) => ((1 - s) * v + s * SHAPE_MEAN) * BASE_WP * mult);
+    const byPresence = present.slice().sort((a, b) => b - a);
+    let requiredBVO;
+    if (m === "bezetting") {
+      // genoeg werkplekken om de twee drukste dagen op 75% te krijgen, en de drukste dag te laten passen
+      const need = Math.max((byPresence[0] + byPresence[1]) / 2 / 0.75, byPresence[0]);
+      requiredBVO = need * st.m2;
+    } else {
+      requiredBVO = fte * st.wpf * st.m2;
+    }
+    // per vijfentwintigste minder ruimte gaat één gebouw in de verkoop; één blijft altijd staan
+    let nSell = Math.floor((TOTAL_BVO - requiredBVO) / BLOCK_BVO + 1e-9);
+    nSell = Math.max(0, Math.min(NB - 1, nSell));
+    const sold = new Set(SELL_ORDER.slice(0, nSell));
+    const keptBVO = (NB - nSell) * BLOCK_BVO;
+    const shortOfSpace = requiredBVO > TOTAL_BVO + 1;
+    const capacity = keptBVO / st.m2;
+    const occ = present.map((p) => p / capacity);
+    const queue = present.map((p) => Math.max(0, p - capacity));
+    const sorted = occ.slice().sort((a, b) => b - a);
+    const top2 = (sorted[0] + sorted[1]) / 2;
+    const saved = 1 - keptBVO / TOTAL_BVO;
+    const keptCost = (NB - nSell) * BLOCK_COST;
+    const served = present.map((p) => Math.min(p, capacity));
+    const avgServed = served.reduce((a, b) => a + b, 0) / 5;
+    const perPresent = avgServed > 0 ? (keptCost / RVB_SHARE) / avgServed : 0;
+    const noQueue = queue.every((q) => q < 1);
+    const okBand = top2 >= 0.70 && top2 <= 0.80;
+    const okSaved = saved >= 0.15;
+    const win = okBand && noQueue && okSaved;
+    const stars = !win ? 0 : saved >= 0.50 ? 3 : saved >= 0.35 ? 2 : 1;
+    const impliedWpf = capacity / fte;
+    return { fte, requiredBVO, sold, keptBVO, keptCost, capacity, present, occ, queue, top2, saved, perPresent, noQueue, okBand, okSaved, win, stars, shortOfSpace, impliedWpf, mode: m };
+  }
+
+  // ---------- UI refs ----------
+  const $ = (id) => document.getElementById(id);
+  const inputs = { wpf: $("wpf"), m2: $("m2"), spread: $("spread"), daysmul: $("daysmul"), krimp: $("krimp") };
+  const outs = { wpf: $("o-wpf"), m2: $("o-m2"), spread: $("o-spread"), daysmul: $("o-days"), krimp: $("o-krimp") };
+  const canvas = $("game");
+  const ctx = canvas.getContext("2d");
+  const W = 320, H = 240;
+  const reduceMotion = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+
+  function state() {
+    return {
+      wpf: parseFloat(inputs.wpf.value),
+      m2: parseFloat(inputs.m2.value),
+      spread: parseFloat(inputs.spread.value),
+      daysmul: parseFloat(inputs.daysmul.value),
+      krimp: parseFloat(inputs.krimp.value)
+    };
+  }
+
+  // ---------- Day bars ----------
+  const dayEls = [];
+  (function buildDays() {
+    const wrap = $("days");
+    DAYS.forEach((d, i) => {
+      const el = document.createElement("div");
+      el.className = "day";
+      el.innerHTML = '<div class="track"><div class="band"></div><div class="fill"></div></div>' +
+        '<div class="lbl">' + d + '</div><div class="pct">0%</div><div class="q"></div>';
+      el.setAttribute("aria-label", DAY_NAMES[i]);
+      wrap.appendChild(el);
+      dayEls.push(el);
+    });
+  })();
+
+  function renderDays(r, activeIdx) {
+    r.occ.forEach((o, i) => {
+      const el = dayEls[i];
+      const h = Math.min(o, 1.2) / 1.2 * 100;
+      el.querySelector(".fill").style.height = h + "%";
+      el.querySelector(".pct").textContent = pct(o);
+      el.classList.toggle("over", r.queue[i] >= 1);
+      el.classList.toggle("active", i === activeIdx);
+      el.querySelector(".q").textContent = r.queue[i] >= 1 ? nf0.format(Math.round(r.queue[i] / 10) * 10) + " buiten" : "";
+    });
+    // band op 70-80% van de schaal tot 120%
+    dayEls.forEach((el) => {
+      const b = el.querySelector(".band");
+      b.style.bottom = (0.70 / 1.2 * 100) + "%";
+      b.style.height = (0.10 / 1.2 * 100) + "%";
+    });
+  }
+
+  function renderHud(r) {
+    $("hudM2").textContent = nf0.format(Math.round(r.keptBVO)) + " m²";
+    const changed = r.saved > 0.0005;
+    $("hudM2d").textContent = changed ? pct(r.saved) + " minder" : "zoals 2024";
+    $("hudCostd").textContent = changed ? "€ " + nf1.format((TOTAL_COST - r.keptCost) / 1e6) + " mln minder" : "zoals 2024";
+    $("hudCost").textContent = "€ " + nf1.format(r.keptCost / 1e6) + " mln";
+    $("hudPer").textContent = "€ " + nf0.format(Math.round(r.perPresent / 100) * 100);
+    if (!renderHud.base) renderHud.base = compute(DEFAULTS, "rijk").perPresent;
+    const perBase = Math.round(renderHud.base / 100) * 100, perNow = Math.round(r.perPresent / 100) * 100;
+    $("hudPerd").textContent = perNow === perBase ? "zoals 2024" : "was € " + nf0.format(perBase);
+  }
+
+  function renderOutputs(st) {
+    outs.wpf.textContent = nf2.format(st.wpf);
+    outs.m2.textContent = nf1.format(st.m2) + " m²";
+    outs.spread.textContent = st.spread === 0 ? "zoals 2024" : st.spread === 100 ? "gelijk" : st.spread + "%";
+    outs.daysmul.textContent = st.daysmul === 0 ? "zoals 2024" : (st.daysmul > 0 ? "+" : "−") + Math.abs(st.daysmul) + "%";
+    outs.krimp.textContent = st.krimp === 0 ? "geen" : "−" + st.krimp + "%";
+  }
+
+  // ---------- Layout of buildings on the 320x240 canvas ----------
+  const ROWS = 5, COLS = 5, ROW_H = 48, SLOT_W = 64;
+  const BW = 40, BH = 30;
+  const TYPES = [0, 1, 2, 3, 1, 2, 0, 3, 2, 1, 3, 0, 1, 2, 3, 0, 2, 1, 0, 3, 1, 3, 2, 0, 1];
+  const BLD = Array.from({ length: NB }, (_, i) => {
+    const row = Math.floor(i / COLS), col = i % COLS;
+    const groundY = row * ROW_H + 42;
+    const x = col * SLOT_W + SLOT_W - BW - 4;
+    const winCols = Math.floor((BW - 4) / 4);
+    const winRows = Math.floor((BH - 6) / 4);
+    return { i, row, x, y: groundY - BH, w: BW, h: BH, groundY, doorX: x + 3, winCols, winRows, nWin: winCols * winRows, tone: i % 3, type: TYPES[i] };
+  });
+
+  // ---------- Colors from CSS ----------
+  let C = {};
+  function readColors() {
+    const cs = getComputedStyle(document.documentElement);
+    const g = (n) => cs.getPropertyValue(n).trim();
+    C = {
+      sky: g("--c-sky"), ground: g("--c-ground"), line: g("--c-line"),
+      bld: [g("--c-bld1"), g("--c-bld2"), g("--c-bld3")],
+      outline: g("--c-outline"), win: g("--c-win"), lit: g("--c-lit"),
+      sold: g("--c-sold"), plank: g("--c-plank"), sign: g("--c-sign"), signtext: g("--c-signtext"),
+      suit: g("--c-suit"), skin: [g("--c-skin1"), g("--c-skin2")], tie: g("--c-tie"), cup: g("--c-cup"),
+      select: g("--c-select")
+    };
+  }
+
+  // ---------- Drawing ----------
+  let selected = -1;
+
+  function px(x, y, w, h, col) { ctx.fillStyle = col; ctx.fillRect(x | 0, y | 0, w, h); }
+
+  function drawScene(r, litFrac) {
+    px(0, 0, W, H, C.sky);
+    for (let row = 0; row < ROWS; row++) {
+      const gy = row * ROW_H + 42;
+      px(0, gy, W, 6, C.ground);
+      px(0, gy, W, 1, C.line);
+    }
+    BLD.forEach((b) => drawBuilding(b, r, litFrac ? litFrac[b.i] : 0));
+  }
+
+  function drawBuilding(b, r, lit) {
+    const isSold = r.sold.has(b.i);
+    const body = isSold ? C.sold : C.bld[b.tone];
+    px(b.x - 1, b.y - 1, b.w + 2, b.h + 1, C.outline);
+    px(b.x, b.y, b.w, b.h, body);
+    // dak, per type een ander gezicht
+    if (b.type === 0) {          // toren met spits
+      px(b.x + 2, b.y - 2, b.w - 4, 1, C.outline);
+      px(b.x + Math.floor(b.w / 2) - 1, b.y - 7, 2, 5, C.outline);
+    } else if (b.type === 1) {   // plat met installatie
+      px(b.x, b.y - 2, b.w, 2, C.outline);
+      px(b.x + b.w - 12, b.y - 6, 8, 4, C.outline);
+    } else if (b.type === 2) {   // oud pand met trapgevel
+      for (let k = 0; k < 4; k++) px(b.x + 6 + k * 3, b.y - 2 - k * 2, b.w - 12 - k * 6, 2, C.outline);
+    } else {                     // glas met daklijst
+      px(b.x - 1, b.y - 3, b.w + 2, 1, C.outline);
+      px(b.x + 4, b.y - 5, 2, 2, C.outline);
+    }
+    // ramen
+    const litCount = isSold ? 0 : Math.round(lit * b.nWin);
+    let n = 0;
+    for (let ry = 0; ry < b.winRows; ry++) {
+      for (let cx = 0; cx < b.winCols; cx++) {
+        const wx = b.x + 2 + cx * 4, wy = b.y + 2 + ry * 4;
+        // vul van onderen naar boven, zoals een gebouw dat volloopt
+        const idx = (b.winRows - 1 - ry) * b.winCols + cx;
+        px(wx, wy, 3, 3, (!isSold && idx < litCount) ? C.lit : C.win);
+        n++;
+      }
+    }
+    // deur
+    px(b.doorX, b.groundY - 5, 3, 5, C.outline);
+    if (isSold) {
+      // planken
+      px(b.x + 1, b.y + Math.floor(b.h / 2) - 1, b.w - 2, 2, C.plank);
+      // bordje te koop
+      const sx = b.x + Math.floor(b.w / 2) - 7, sy = b.groundY - 14;
+      px(sx - 1, sy - 1, 16, 9, C.outline);
+      px(sx, sy, 14, 7, C.sign);
+      px(sx + 2, sy + 2, 10, 1, C.signtext);
+      px(sx + 2, sy + 4, 7, 1, C.signtext);
+      px(sx + 6, sy + 7, 2, 5, C.outline);
+    }
+    if (b.i === selected) {
+      ctx.strokeStyle = C.select;
+      ctx.lineWidth = 1;
+      ctx.strokeRect(b.x - 2.5, b.y - 4.5, b.w + 5, b.h + 6);
+    }
+  }
+
+  function drawPerson(x, y, frame, skin, cup) {
+    // 3 breed, 7 hoog; y = voeten
+    px(x, y - 7, 3, 2, skin);           // hoofd
+    px(x, y - 5, 3, 3, C.suit);         // pak
+    px(x + 1, y - 5, 1, 2, C.tie);      // stropdas
+    if (frame === 0) { px(x, y - 2, 1, 2, C.suit); px(x + 2, y - 2, 1, 2, C.suit); }
+    else { px(x + 1, y - 2, 1, 2, C.suit); }
+    if (cup) { px(x + 3, y - 4, 1, 2, C.cup); }
+  }
+
+  function drawBubble(x, y) {
+    // tekstballonnetje met uitroepteken boven het hoofd
+    px(x - 2, y - 15, 7, 6, C.outline);
+    px(x - 1, y - 14, 5, 4, C.cup);
+    px(x + 1, y - 14, 1, 2, C.tie);
+    px(x + 1, y - 11, 1, 1, C.tie);
+    px(x, y - 9, 1, 1, C.outline);
+  }
+
+  // ---------- Simulation of one week ----------
+  let anim = null;
+  let lastResult = null;
+
+  function weightedBuildings(r) {
+    const kept = BLD.filter((b) => !r.sold.has(b.i));
+    return kept.map((b) => ({ b, share: 1 / kept.length }));
+  }
+
+  function makeDaySprites(r, d) {
+    const wb = weightedBuildings(r);
+    const inside = Math.min(r.present[d], r.capacity);
+    const q = r.queue[d];
+    const sprites = [];
+    const mk = (b, queued, qIdx) => {
+      const targetX = queued ? b.doorX - 5 - qIdx * 5 : b.doorX;
+      sprites.push({
+        b, queued, qIdx,
+        // vertrekt vlak voor het eigen gebouw, zodat iedereen er binnen de dag is
+        x: targetX - 16 - Math.random() * 26,
+        start: Math.random() * 1400,
+        speed: 0.045 + Math.random() * 0.025,
+        skin: Math.random() < 0.5 ? 0 : 1,
+        phase: Math.random() * 600,
+        moans: Math.random() < 0.6,
+        done: false
+      });
+    };
+    wb.forEach(({ b, share }) => {
+      const nIn = Math.round(inside * share / UNIT);
+      for (let k = 0; k < nIn; k++) mk(b, false, -1);
+    });
+    // wie niet past, staat buiten: verdeeld over de gebouwen, minstens één poppetje als er een rij is
+    const nQ = q >= 1 ? Math.max(1, Math.round(q / UNIT)) : 0;
+    const qCount = {};
+    for (let k = 0; k < nQ; k++) {
+      const b = wb[k % wb.length].b;
+      qCount[b.i] = qCount[b.i] || 0;
+      mk(b, true, qCount[b.i]++);
+    }
+    return sprites;
+  }
+
+  function startWeek() {
+    stopAnim();
+    const r = compute(state());
+    lastResult = r;
+    renderHud(r);
+    $("skip").hidden = false;
+    $("start").disabled = true;
+    $("result").innerHTML = '<div class="head">De week loopt…</div><p>Kijk wie er binnenkomt.</p>';
+    if (reduceMotion) { finishWeek(r); return; }
+    anim = { r, d: 0, t0: performance.now(), sprites: makeDaySprites(r, 0), entered: {}, hold: 0, raf: 0 };
+    renderDays(blankDays(r), 0);
+    anim.raf = requestAnimationFrame(tick);
+  }
+
+  function blankDays(r) {
+    return { occ: r.occ.map(() => 0), queue: r.queue.map(() => 0) };
+  }
+
+  const WALK_MS = 2600, HOLD_MS = 800, HOLD_QUEUE_MS = 3200;
+
+  function tick(now) {
+    if (!anim) return;
+    const a = anim, r = a.r;
+    const t = now - a.t0;
+    const occDay = Math.min(1, r.occ[a.d]);
+    const perB = {};
+    a.sprites.forEach((s) => {
+      const k = s.b.i;
+      if (!perB[k]) perB[k] = { tot: 0, inn: 0 };
+      if (!s.queued) perB[k].tot++;
+      const st = t - s.start;
+      s.cx = null;
+      if (st < 0) return;
+      const targetX = s.queued ? s.b.doorX - 5 - s.qIdx * 5 : s.b.doorX;
+      let x = s.x + st * s.speed;
+      s.atDoor = x >= targetX;
+      if (s.atDoor) x = targetX;
+      if (!s.queued && s.atDoor) { s.done = true; perB[k].inn++; }
+      s.cx = x;
+      s.frame = Math.floor(st / 160) % 2;
+    });
+    const lit = new Array(NB).fill(0);
+    BLD.forEach((b) => {
+      if (r.sold.has(b.i)) return;
+      const v = perB[b.i];
+      lit[b.i] = v && v.tot > 0 ? occDay * (v.inn / v.tot) : occDay * Math.min(1, t / WALK_MS);
+    });
+    drawScene(r, lit);
+    a.sprites.forEach((s) => {
+      if (s.cx === null || (s.done && !s.queued)) return;
+      const standing = s.queued && s.atDoor;
+      if (!standing) { drawPerson(s.cx, s.b.groundY, s.frame, C.skin[s.skin], false); return; }
+      // buiten blijven staan: springen en mopperen
+      const ph = (t + s.phase) % 600;
+      const jump = ph < 160 ? 2 : ph < 240 ? 1 : 0;
+      const y = s.b.groundY - jump;
+      drawPerson(s.cx, y, 0, C.skin[s.skin], true);
+      if (s.moans && Math.floor((t + s.phase) / 450) % 2 === 0) drawBubble(s.cx, y);
+    });
+
+    const prog = Math.min(1, t / WALK_MS);
+    const partial = {
+      occ: r.occ.map((o, i) => i < a.d ? o : i === a.d ? o * prog : 0),
+      queue: r.queue.map((q, i) => i < a.d ? q : (i === a.d && prog >= 1) ? q : 0)
+    };
+    renderDays(partial, a.d);
+    $("status").textContent = DAY_NAMES[a.d].charAt(0).toUpperCase() + DAY_NAMES[a.d].slice(1) + ": " +
+      pct(r.occ[a.d] * prog) + " bezet" +
+      (prog >= 1 && r.queue[a.d] >= 1 ? ", " + nf0.format(Math.round(r.queue[a.d] / 10) * 10) + " buiten" : "");
+
+    if (t > WALK_MS + (r.queue[a.d] >= 1 ? HOLD_QUEUE_MS : HOLD_MS)) {
+      if (a.d < 4) {
+        a.d++;
+        a.t0 = now;
+        a.sprites = makeDaySprites(r, a.d);
+      } else {
+        finishWeek(r);
+        return;
+      }
+    }
+    a.raf = requestAnimationFrame(tick);
+  }
+
+  function stopAnim() {
+    if (anim) { cancelAnimationFrame(anim.raf); anim = null; }
+  }
+
+  function finishWeek(r) {
+    stopAnim();
+    $("skip").hidden = true;
+    $("start").disabled = false;
+    // eindbeeld: vrijdag
+    const lit = new Array(NB).fill(Math.min(1, r.occ[4]));
+    drawScene(r, lit);
+    renderDays(r, -1);
+    $("status").textContent = "Vrijdag: " + pct(r.occ[4]) + " bezet. Zo eindigt de week.";
+    showResult(r);
+  }
+
+  // ---------- Result ----------
+  function showResult(r) {
+    const st = state();
+    if (r.mode === "bezetting") { showCompare(r, st); return; }
+    const check = (ok, text) => "<li>" + (ok ? "✓ " : "✗ ") + text + "</li>";
+    const maxQ = Math.max(...r.queue);
+    const qDay = r.queue.indexOf(maxQ);
+    let head, msg;
+    if (r.shortOfSpace) {
+      head = "Te weinig ruimte";
+      msg = "Met deze instellingen heeft het Rijk meer kantoor nodig dan er staat. Bouwen zit niet in dit spel.";
+    } else if (r.win) {
+      head = "Gelukt " + "★".repeat(r.stars) + "☆".repeat(3 - r.stars);
+      msg = "De drukste dagen zitten op " + pct(r.top2) + ", niemand staat buiten en er is " + pct(r.saved) + " minder kantoor. Dat scheelt € " + nf1.format((248851066 - r.keptCost) / 1e6) + " mln per jaar aan huisvesting.";
+    } else if (maxQ >= 1) {
+      head = "Rij op de stoep";
+      msg = "Op " + DAY_NAMES[qDay] + " stonden " + nf0.format(Math.round(maxQ / 10) * 10) + " ambtenaren buiten. Met koffie.";
+    } else if (r.top2 < 0.70) {
+      head = "Nog veel lege bureaus";
+      msg = "De twee drukste dagen zitten gemiddeld op " + pct(r.top2) + ". De rest van de werkplekken wordt betaald, maar niet gebruikt.";
+    } else if (r.top2 > 0.80) {
+      head = "Krap";
+      msg = "De drukste dagen zitten op " + pct(r.top2) + ". Eén griepgolf minder en er staat iemand buiten.";
+    } else {
+      head = "Bijna";
+      msg = "De bezetting klopt, maar de portefeuille is pas " + pct(r.saved) + " kleiner.";
+    }
+    let tip = "";
+    if (r.win && st.krimp > 0) tip = "Met minder ambtenaren is het makkelijk. Lukt het ook zonder krimp?";
+    else if (r.win && st.daysmul < 0) tip = "Met meer thuiswerken is het makkelijk. Lukt het ook als iedereen blijft komen?";
+    else if (r.win && r.stars < 3 && st.spread < 50) tip = "Met meer spreiding over de week kan er nog meer af.";
+    else if (r.win && r.stars === 3) tip = "Drie sterren. Het Rijk zoekt mensen voor de masterplannen van 2027.";
+    else if (!r.win && maxQ >= 1 && st.spread < 50) tip = "Probeer de week gelijker te verdelen.";
+    else if (!r.win && r.top2 < 0.70) tip = "Probeer minder werkplekken per fte, of minder vierkante meter per werkplek.";
+
+    $("result").innerHTML =
+      '<div class="head">' + head + '</div>' +
+      '<p>' + msg + '</p>' +
+      '<ul>' +
+      check(r.okBand, "Drukste dagen tussen 70 en 80%: " + pct(r.top2)) +
+      check(r.noQueue, "Niemand buiten") +
+      check(r.okSaved, "Minstens 15% minder m²: " + pct(r.saved)) +
+      '</ul>' +
+      (tip ? '<p class="tip">' + tip + '</p>' : "");
+  }
+
+  function showCompare(r, st) {
+    const rij = compute(st, "rijk");
+    const nBez = NB - r.sold.size, nRijk = NB - rij.sold.size;
+    let head = "Rekenen op bezetting", msg, extra = "";
+    if (r.shortOfSpace) {
+      msg = "Met deze week komen er meer mensen dan er plek is. Dan zou het Rijk moeten bijbouwen.";
+    } else {
+      msg = "Met deze week zijn er " + nBez + " van de 25 gebouwen nodig, met " + nf2.format(r.impliedWpf) +
+        " werkplek per fte. De formule van het Rijk komt met " + nf2.format(st.wpf) + " werkplek per fte op " + nRijk + " gebouwen.";
+      const d = nRijk - nBez;
+      if (d > 0) extra = "Verschil: " + d + (d === 1 ? " gebouw" : " gebouwen") + ", € " + nf1.format(d * BLOCK_COST / 1e6) + " mln per jaar aan huisvesting.";
+      else if (d < 0) extra = "Hier rekent het Rijk krapper dan de bezetting nodig maakt: op de drukste dagen zou het te vol worden.";
+      else extra = "Hier komen beide rekenwijzen op hetzelfde uit.";
+    }
+    const tip = st.spread < 50
+      ? "Schuif de spreiding op en kijk hoeveel gebouwen er dan nog nodig zijn."
+      : "Zet de rekenwijze terug op het Rijk en vergelijk.";
+    $("result").innerHTML =
+      '<div class="head">' + head + '</div>' +
+      '<p>' + msg + '</p>' + (extra ? '<p>' + extra + '</p>' : "") +
+      '<ul>' +
+      '<li>Drukste dagen: ' + pct(r.top2) + '</li>' +
+      '<li>Buiten: ' + (r.noQueue ? 'niemand' : nf0.format(Math.round(Math.max(...r.queue) / 10) * 10)) + '</li>' +
+      '<li>Minder kantoor: ' + pct(r.saved) + '</li>' +
+      '</ul>' +
+      '<p class="tip">' + tip + '</p>';
+  }
+
+  // ---------- Live preview ----------
+  function preview() {
+    const st = state();
+    renderOutputs(st);
+    if (anim) return;
+    const r = compute(st);
+    lastResult = r;
+    if (mode === "bezetting") outs.wpf.textContent = nf2.format(r.impliedWpf) + " volgt";
+    renderHud(r);
+    renderDays(r, -1);
+    drawScene(r, null);
+  }
+
+  Object.values(inputs).forEach((el) => el.addEventListener("input", () => {
+    if (anim) { stopAnim(); $("skip").hidden = true; $("start").disabled = false; }
+    $("result").innerHTML = '<div class="head">Klaar voor de start</div><p>Druk op Start week om te zien hoe het uitpakt.</p>';
+    preview();
+    if (mode === "rijk" && (el.id === "spread" || el.id === "daysmul")) {
+      $("status").textContent = "In de formule van het Rijk telt bezetting niet mee, dus de gebouwen blijven staan. Kijk naar de balkjes, of zet de rekenwijze op bezetting.";
+    } else if (mode === "bezetting") {
+      $("status").textContent = "Op bezetting: " + (NB - lastResult.sold.size) + " van de 25 gebouwen nodig.";
+    }
+  }));
+
+  // ---------- Rekenwijze ----------
+  const TEXT = {
+    rijk: {
+      goal: "De twee drukste dagen tussen 70 en 80 procent bezet. Niemand buiten. En minstens 15 procent minder vierkante meters.",
+      wpf: "Nu 0,68. Het kabinet wil naar 0,50.",
+      spread: "Van zoals in 2024 naar elke dag even druk. In de formule van het Rijk verandert dit het aantal gebouwen niet.",
+      days: "Meer thuis of juist meer op kantoor. Telt in de formule van het Rijk niet mee."
+    },
+    bezetting: {
+      goal: "Het spel bepaalt zelf hoeveel gebouwen nodig zijn om de twee drukste dagen op 75 procent te krijgen. Schuif aan de spreiding en kijk wat er gebeurt.",
+      wpf: "Volgt nu uit wie er komt.",
+      spread: "Van zoals in 2024 naar elke dag even druk. Hier telt het wel mee.",
+      days: "Meer thuis of juist meer op kantoor. Telt hier wel mee."
+    }
+  };
+  function setMode(m) {
+    mode = m;
+    stopAnim(); $("skip").hidden = true; $("start").disabled = false;
+    $("m-rijk").setAttribute("aria-pressed", String(m === "rijk"));
+    $("m-bez").setAttribute("aria-pressed", String(m === "bezetting"));
+    inputs.wpf.disabled = m === "bezetting";
+    $("c-wpf").classList.toggle("off", m === "bezetting");
+    const t = TEXT[m];
+    $("goal").textContent = t.goal; $("h-wpf").textContent = t.wpf;
+    $("h-spread").textContent = t.spread; $("h-days").textContent = t.days;
+    preview();
+    const rij = compute(state(), "rijk");
+    if (m === "bezetting") {
+      $("status").textContent = "Op bezetting: " + (NB - lastResult.sold.size) + " van de 25 gebouwen nodig. Volgens de formule van het Rijk: " + (NB - rij.sold.size) + ".";
+      $("result").innerHTML = '<div class="head">Rekenen op bezetting</div><p>Druk op Start week om de twee rekenwijzen te vergelijken.</p>';
+    } else {
+      $("status").textContent = "Zoals het Rijk: het aantal gebouwen volgt uit fte en werkplekken per fte.";
+      $("result").innerHTML = '<div class="head">Klaar voor de start</div><p>Druk op Start week om te zien hoe het uitpakt.</p>';
+    }
+  }
+  $("m-rijk").addEventListener("click", () => setMode("rijk"));
+  $("m-bez").addEventListener("click", () => setMode("bezetting"));
+
+  $("start").addEventListener("click", startWeek);
+  $("skip").addEventListener("click", () => { if (anim) finishWeek(anim.r); });
+  $("reset").addEventListener("click", () => {
+    stopAnim();
+    Object.keys(DEFAULTS).forEach((k) => { inputs[k].value = DEFAULTS[k]; });
+    $("skip").hidden = true;
+    $("start").disabled = false;
+    $("result").innerHTML = '<div class="head">Terug in 2024</div><p>Druk op Start week om de echte week te zien.</p>';
+    selected = -1;
+    $("status").textContent = "Elk gebouw: 30.098 m², plek voor ongeveer 1.250 werkplekken.";
+    preview();
+  });
+
+  // ---------- Building selection ----------
+  canvas.addEventListener("click", (e) => {
+    const rect = canvas.getBoundingClientRect();
+    const x = (e.clientX - rect.left) / rect.width * W;
+    const y = (e.clientY - rect.top) / rect.height * H;
+    const hit = BLD.find((b) => x >= b.x - 3 && x <= b.x + b.w + 3 && y >= b.y - 4 && y <= b.groundY + 2);
+    if (!hit) return;
+    selected = hit.i;
+    const r = lastResult || compute(state());
+    const st = state();
+    const plekken = Math.round(BLOCK_BVO / st.m2 / 10) * 10;
+    $("status").textContent = r.sold.has(hit.i)
+      ? "Dit gebouw is te koop: 30.098 m² minder, € " + nf1.format(BLOCK_COST / 1e6) + " mln per jaar minder aan huisvesting."
+      : "Een vijfentwintigste van de rijkskantoren: 30.098 m², plek voor ongeveer " + nf0.format(plekken) + " werkplekken.";
+    if (!anim) drawScene(r, null);
+  });
+
+  // ---------- Theme ----------
+  const mq = window.matchMedia("(prefers-color-scheme: dark)");
+  const onTheme = () => { readColors(); if (!anim) { const r = lastResult || compute(state()); drawScene(r, null); } };
+  if (mq.addEventListener) mq.addEventListener("change", onTheme); else if (mq.addListener) mq.addListener(onTheme);
+
+  // ---------- Init ----------
+  readColors();
+  preview();
+  if (document.fonts && document.fonts.ready) document.fonts.ready.then(() => preview());
+})();
+</script>
+</body>
+</html>
