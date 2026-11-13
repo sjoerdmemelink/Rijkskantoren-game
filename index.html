@@ -304,7 +304,7 @@ footer a { color: var(--fg); }
   <h1>RIJKSKANTOOR.EXE<span class="cursor" aria-hidden="true"></span></h1>
   <div class="intro">
     <p>Den Haag, 2024. Vijfentwintig rijkskantoren, 46.140 ambtenaren, 752.443 vierkante meter. Op dinsdag komt bijna de helft, op vrijdag bijna niemand.</p>
-    <p>Elk gebouw in dit spel staat voor een vijfentwintigste van al die rijkskantoren: zo’n 30.000 vierkante meter. Jij bepaalt hoeveel kantoor het Rijk nodig heeft. Stel de schuiven in en druk op Start week.</p>
+    <p>Dit zijn de 25 echte rijkskantoren, op schaal van hun vloeroppervlak. Tik op een gebouw om te zien welk het is. Jij bepaalt hoeveel kantoor het Rijk nodig heeft. Stel de schuiven in en druk op Start week.</p>
   </div>
 </header>
 
@@ -317,7 +317,7 @@ footer a { color: var(--fg); }
       <div><span class="k">Per aanwezige</span><span class="v" id="hudPer">€ 39.900</span><span class="d" id="hudPerd">zoals 2024</span></div>
     </div>
     <div class="stage">
-    <canvas id="game" width="320" height="240" aria-label="De Haagse rijkskantoren als 25 even grote pixelgebouwen, elk een vijfentwintigste van de totale oppervlakte." role="img"></canvas>
+    <canvas id="game" width="320" height="240" aria-label="De 25 Haagse rijkskantoren als pixelgebouwen, op schaal van hun vloeroppervlak." role="img"></canvas>
       <button type="button" id="bigstart" class="bigstart">Start week</button>
     </div>
     <p class="status" id="status" aria-live="polite">Tik op een gebouw voor uitleg.</p>
@@ -393,7 +393,7 @@ footer a { color: var(--fg); }
   <h2>Hoe het spel rekent</h2>
   <p>In de stand <em>Zoals het Rijk</em> rekent het spel zoals het Rijk zelf: aantal fte maal werkplekken per fte maal vierkante meter per werkplek geeft de ruimte die nodig is. Hoeveel mensen er werkelijk komen, telt daarin niet mee.</p>
   <p>In de stand <em>Op bezetting</em> draait het spel dat om. Het neemt de mensen die op de twee drukste dagen komen, en houdt precies genoeg werkplekken over om die dagen op 75 procent te krijgen, de streefwaarde uit het Kader Rijkskantoren. De werkplekken per fte volgen daar dan uit.</p>
-  <p>De 25 rijkskantoren zijn getekend als 25 even grote gebouwen, elk een vijfentwintigste van de totale oppervlakte. Is er minder ruimte nodig, dan gaat per vier procent één gebouw in de verkoop. Welk gebouw het bordje krijgt, zegt niets over welk echt pand het Rijk zou afstoten. In werkelijkheid zijn de panden heel verschillend: de negen grootste bevatten driekwart van alle ruimte.</p>
+  <p>De 25 rijkskantoren zijn getekend op schaal van hun vloeroppervlak, met de oppervlakte uit de opgave van het Rijk. Is er minder ruimte nodig, dan gaan de kleinste panden als eerste in de verkoop, zolang de rest nog genoeg ruimte biedt. Dat is een rekenregel van dit spel. Welk pand een bordje krijgt, zegt niets over welk pand het Rijk zou afstoten; daarover is niets bekend. Omdat de negen grootste panden driekwart van alle ruimte bevatten, gaan er bij een kleine besparing al veel kleine panden in de verkoop.</p>
   <p>Hoeveel mensen er per dag komen, volgt uit de gemeten bezetting van 2024: maandag 37, dinsdag 48, woensdag 25, donderdag 43 en vrijdag 12 procent. Spreiding verdeelt hetzelfde aantal kantoordagen gelijker over de week.</p>
 
   <h2>Aannames</h2>
@@ -401,8 +401,9 @@ footer a { color: var(--fg); }
     <li>De bezettingspercentages zijn gescande toegangspassen, medewerkers en bezoekers samen. Ze zeggen wie naar binnen liep, niet wie aan een bureau zat. Ik lees ze als aandeel van de ongeveer 31.500 werkplekken. Meet het Rijk ze tegen een ander getal af, dan verschuift de uitkomst van dit spel.</li>
     <li>Er is geen bezetting per pand bekend, alleen voor Den Haag als geheel. Alle panden krijgen daarom dezelfde week.</li>
     <li>Er wordt in dit spel niet gebouwd en niet per verdieping afgestoten. Boekwaarde, verkoopopbrengst en geschiktheid voor woningen tellen niet mee.</li>
-    <li>Kosten per jaar zijn de huisvestingskosten zoals opgegeven door het Rijk, gelijk verdeeld over de 25 gebouwen. Kosten per aanwezige rekenen daar facilitair en ICT bij, in de verhouding 6 staat tot 4 die het Rijk zelf hanteert.</li>
+    <li>Kosten per jaar zijn de huisvestingskosten per pand zoals opgegeven door het Rijk. Kosten per aanwezige rekenen daar facilitair en ICT bij, in de verhouding 6 staat tot 4 die het Rijk zelf hanteert.</li>
     <li>Parnassusplein 5 staat in de opgave van het Rijk dubbel; het totaal volgt de officiële opgave.</li>
+    <li>De gebouwnamen komen uit openbare bronnen. Tien panden hebben geen bekende naam en staan met hun adres in het spel. Voor Beatrixpark geeft de opgave van het Rijk 31.765 m²; andere stukken van het RVB noemen 30.425 m².</li>
   </ul>
 
   <h2>De echte panden</h2>
@@ -423,14 +424,39 @@ footer a { color: var(--fg); }
 (function () {
   "use strict";
 
-  // ---------- Data: opgave Rijk 2024, 25 panden ----------
-  const NB = 25;
+  // ---------- Data: opgave Rijk 2024, 25 panden; namen uit openbare bronnen ----------
+  const PANDEN = [
+    { n: "JuBi-torens", a: "Turfmarkt 147", bvo: 121920, fte: 7401, k: 40355520 },
+    { n: "Het oude VROM-gebouw", a: "Rijnstraat 8", bvo: 84809, fte: 7197, k: 28071779 },
+    { n: "KV7", a: "Korte Voorhout 7", bvo: 67775, fte: 3840, k: 22433525 },
+    { n: "De Resident", a: "Parnassusplein 5", bvo: 64506, fte: 4242, k: 21351486 },
+    { n: "Hoftoren", a: "Rijnstraat 50", bvo: 61235, fte: 3104, k: 20265776 },
+    { n: "B73", a: "Bezuidenhoutseweg 73", bvo: 56808, fte: 3529, k: 18598890 },
+    { n: "Rijkswaterstaatgebouw", a: "Koningskade 4", bvo: 38230, fte: 1860, k: 12654130 },
+    { n: "Centre Court", a: "Prinses Beatrixlaan 2", bvo: 36907, fte: 2268, k: 12216217 },
+    { n: "Plein-Kalvermarktcomplex", a: "Kalvermarkt 32", bvo: 36046, fte: 2938, k: 11931226 },
+    { n: "Beatrixpark", a: "Wilhelmina van Pruisenweg 52", bvo: 31765, fte: 2564, k: 10514215 },
+    { n: "Prinsenhof", a: "Prinses Beatrixlaan 450-512", bvo: 24622, fte: 1671, k: 8149882 },
+    { n: "Zurichtoren", a: "Muzenstraat 31-107", bvo: 23399, fte: 1255, k: 7745069 },
+    { n: "B30", a: "Bezuidenhoutseweg 30", bvo: 18011, fte: 808, k: 5961641 },
+    { n: "", a: "Schedeldoekshaven 101", bvo: 13271, fte: 648, k: 4392701 },
+    { n: "", a: "Prinses Beatrixlaan 116", bvo: 11243, fte: 442, k: 3721433 },
+    { n: "Voormalig NHM-gebouw", a: "Kneuterdijk 1", bvo: 10880, fte: 237, k: 3601280 },
+    { n: "", a: "Schedeldoekshaven 131", bvo: 10589, fte: 0, k: 3504959 },
+    { n: "", a: "Schenkkade 100", bvo: 10301, fte: 708, k: 3409631 },
+    { n: "B20", a: "Bezuidenhoutseweg 20", bvo: 8909, fte: 550, k: 2948879 },
+    { n: "Defensie aan het Plein", a: "Plein 4", bvo: 6368, fte: 157, k: 2107808 },
+    { n: "", a: "Prins Clauslaan 14-18", bvo: 4171, fte: 283, k: 1380601 },
+    { n: "", a: "Alexanderveld 5", bvo: 3954, fte: 135, k: 1308774 },
+    { n: "", a: "Henri Faasdreef 312", bvo: 2985, fte: 170, k: 988035 },
+    { n: "", a: "Hoge Nieuwstraat 8", bvo: 2528, fte: 133, k: 836768 },
+    { n: "", a: "Turfmarkt 244", bvo: 1211, fte: 0, k: 400841 }
+  ];
+  const NB = PANDEN.length;
   const TOTAL_COST = 248851066;
   const TOTAL_BVO = 752443;
-  const BLOCK_BVO = TOTAL_BVO / NB;
-  const BLOCK_COST = TOTAL_COST / NB;
-  // vaste, verspreide volgorde waarin gebouwen een bordje krijgen
-  const SELL_ORDER = [12, 3, 21, 8, 16, 0, 24, 6, 18, 11, 2, 22, 14, 9, 19, 5, 1, 23, 13, 7, 17, 4, 20, 10, 15];
+  // spelregel: de kleinste panden gaan als eerste in de verkoop
+  const SELL_ORDER = PANDEN.map((p, i) => i).sort((a, b) => PANDEN[a].bvo - PANDEN[b].bvo);
   const TOTAL_FTE = 46140;
   const BASE_WP = 31500;                       // werkplekken; noemer van de pasaanbiedingen (aanname)
   const SHAPE = [0.37, 0.48, 0.25, 0.43, 0.12]; // bezetting 2024, ma t/m vr
@@ -466,11 +492,13 @@ footer a { color: var(--fg); }
     } else {
       requiredBVO = fte * st.wpf * st.m2;
     }
-    // per vijfentwintigste minder ruimte gaat één gebouw in de verkoop; één blijft altijd staan
-    let nSell = Math.floor((TOTAL_BVO - requiredBVO) / BLOCK_BVO + 1e-9);
-    nSell = Math.max(0, Math.min(NB - 1, nSell));
-    const sold = new Set(SELL_ORDER.slice(0, nSell));
-    const keptBVO = (NB - nSell) * BLOCK_BVO;
+    // kleinste panden eerst in de verkoop, zolang de rest genoeg ruimte biedt; één pand blijft altijd staan
+    const sold = new Set();
+    let keptBVO = TOTAL_BVO;
+    for (const i of SELL_ORDER) {
+      if (sold.size >= NB - 1) break;
+      if (keptBVO - PANDEN[i].bvo >= requiredBVO) { sold.add(i); keptBVO -= PANDEN[i].bvo; } else break;
+    }
     const shortOfSpace = requiredBVO > TOTAL_BVO + 1;
     const capacity = keptBVO / st.m2;
     const occ = present.map((p) => p / capacity);
@@ -478,7 +506,8 @@ footer a { color: var(--fg); }
     const sorted = occ.slice().sort((a, b) => b - a);
     const top2 = (sorted[0] + sorted[1]) / 2;
     const saved = 1 - keptBVO / TOTAL_BVO;
-    const keptCost = (NB - nSell) * BLOCK_COST;
+    let keptCost = 0;
+    PANDEN.forEach((p, i) => { if (!sold.has(i)) keptCost += p.k; });
     const served = present.map((p) => Math.min(p, capacity));
     const avgServed = served.reduce((a, b) => a + b, 0) / 5;
     const perPresent = avgServed > 0 ? (keptCost / RVB_SHARE) / avgServed : 0;
@@ -567,15 +596,17 @@ footer a { color: var(--fg); }
 
   // ---------- Layout of buildings on the 320x240 canvas ----------
   const ROWS = 5, COLS = 5, ROW_H = 48, SLOT_W = 64;
-  const BW = 40, BH = 30;
   const TYPES = [0, 1, 2, 3, 1, 2, 0, 3, 2, 1, 3, 0, 1, 2, 3, 0, 2, 1, 0, 3, 1, 3, 2, 0, 1];
-  const BLD = Array.from({ length: NB }, (_, i) => {
+  const sqMin = Math.sqrt(1211), sqMax = Math.sqrt(121920);
+  const BLD = PANDEN.map((p, i) => {
     const row = Math.floor(i / COLS), col = i % COLS;
+    const t = (Math.sqrt(p.bvo) - sqMin) / (sqMax - sqMin);   // oppervlak op schaal
+    const h = Math.round(8 + 24 * t), w = Math.round(22 + 20 * t);
     const groundY = row * ROW_H + 42;
-    const x = col * SLOT_W + SLOT_W - BW - 4;
-    const winCols = Math.floor((BW - 4) / 4);
-    const winRows = Math.floor((BH - 6) / 4);
-    return { i, row, x, y: groundY - BH, w: BW, h: BH, groundY, doorX: x + 3, winCols, winRows, nWin: winCols * winRows, tone: i % 3, type: TYPES[i] };
+    const x = col * SLOT_W + SLOT_W - w - 4;
+    const winCols = Math.max(2, Math.floor((w - 4) / 4));
+    const winRows = Math.max(1, Math.floor((h - 6) / 4));
+    return { i, row, x, y: groundY - h, w, h, groundY, doorX: x + 3, winCols, winRows, nWin: winCols * winRows, tone: i % 3, type: TYPES[i] };
   });
 
   // ---------- Colors from CSS ----------
@@ -596,7 +627,7 @@ footer a { color: var(--fg); }
   // ---------- Drawing ----------
   let selected = -1;
 
-  function px(x, y, w, h, col) { ctx.fillStyle = col; ctx.fillRect(x | 0, y | 0, w, h); }
+  function px(x, y, w, h, col) { if (w <= 0 || h <= 0) return; ctx.fillStyle = col; ctx.fillRect(x | 0, y | 0, w, h); }
 
   function drawScene(r, litFrac) {
     px(0, 0, W, H, C.sky);
@@ -683,7 +714,8 @@ footer a { color: var(--fg); }
 
   function weightedBuildings(r) {
     const kept = BLD.filter((b) => !r.sold.has(b.i));
-    return kept.map((b) => ({ b, share: 1 / kept.length }));
+    const tot = kept.reduce((a, b) => a + PANDEN[b.i].bvo, 0);
+    return kept.map((b) => ({ b, share: PANDEN[b.i].bvo / tot }));
   }
 
   function makeDaySprites(r, d) {
@@ -886,7 +918,7 @@ footer a { color: var(--fg); }
       msg = "Met deze week zijn er " + nBez + " van de 25 gebouwen nodig, met " + nf2.format(r.impliedWpf) +
         " werkplek per fte. De formule van het Rijk komt met " + nf2.format(st.wpf) + " werkplek per fte op " + nRijk + " gebouwen.";
       const d = nRijk - nBez;
-      if (d > 0) extra = "Verschil: " + d + (d === 1 ? " gebouw" : " gebouwen") + ", € " + nf1.format(d * BLOCK_COST / 1e6) + " mln per jaar aan huisvesting.";
+      if (d > 0) extra = "Verschil: " + d + (d === 1 ? " gebouw" : " gebouwen") + ", € " + nf1.format((rij.keptCost - r.keptCost) / 1e6) + " mln per jaar aan huisvesting.";
       else if (d < 0) extra = "Hier rekent het Rijk krapper dan de bezetting nodig maakt: op de drukste dagen zou het te vol worden.";
       else extra = "Hier komen beide rekenwijzen op hetzelfde uit.";
     }
@@ -997,10 +1029,13 @@ footer a { color: var(--fg); }
     selected = hit.i;
     const r = lastResult || compute(state());
     const st = state();
-    const plekken = Math.round(BLOCK_BVO / st.m2 / 10) * 10;
+    const p = PANDEN[hit.i];
+    const naam = p.n ? p.n + ", " + p.a : p.a;
+    const plekken = Math.round(p.bvo / st.m2 / 10) * 10;
+    const fte = p.fte > 0 ? nf0.format(p.fte) + " fte" : "geen fte opgegeven";
     $("status").textContent = r.sold.has(hit.i)
-      ? "Dit gebouw is te koop: 30.098 m² minder, € " + nf1.format(BLOCK_COST / 1e6) + " mln per jaar minder aan huisvesting. Tik ernaast om terug te gaan."
-      : "Een vijfentwintigste van de rijkskantoren: 30.098 m², plek voor ongeveer " + nf0.format(plekken) + " werkplekken. Tik ernaast om terug te gaan.";
+      ? naam + ": te koop in dit spel. " + nf0.format(p.bvo) + " m², € " + nf1.format(p.k / 1e6) + " mln per jaar. Tik ernaast om terug te gaan."
+      : naam + ": " + nf0.format(p.bvo) + " m², ongeveer " + nf0.format(plekken) + " werkplekken, " + fte + ". Tik ernaast om terug te gaan.";
     if (!anim) drawScene(r, null);
   });
 
